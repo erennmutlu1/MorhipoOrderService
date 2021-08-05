@@ -1,0 +1,125 @@
+﻿-- !!!!!--****Before create a table first of all create a database with MorhipoOrderDatabase name and then you can start to create tables****--!!!!!
+
+
+CREATE TABLE [dbo].[Morhipo] (
+    [orderId]           BIGINT        NOT NULL,
+    [order]             VARCHAR (250) NOT NULL,
+    [itemCount]         BIGINT        NOT NULL,
+    [quantity]          BIGINT        NOT NULL,
+    [grossAmount]       FLOAT (53)    NOT NULL,
+    [taxAmount]         FLOAT (53)    NOT NULL,
+    [netAmount]         FLOAT (53)    NOT NULL,
+    [allowanceAmount]   FLOAT (53)    NOT NULL,
+    [shopperId]         BIGINT        NOT NULL,
+    [shopperEmail]      VARCHAR (250) NOT NULL,
+    [date]              DATETIME      NOT NULL,
+    [commitmentDate]    DATETIME      NOT NULL,
+    [shipmentAddressId] BIGINT        NOT NULL,
+    [invoiceAddressId]  BIGINT        NOT NULL,
+    [items]             BIGINT        NULL,
+    [packages]          BIGINT        NULL,
+    CONSTRAINT [PK__tmp_ms_x__0809335D7899CA33] PRIMARY KEY CLUSTERED ([orderId] ASC)
+);
+
+CREATE TABLE [dbo].[MorhipoAttributes] (
+    [ID]    BIGINT         IDENTITY (1, 1) NOT NULL,
+    [name]  NVARCHAR (50)  NULL,
+    [value] NVARCHAR (200) NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+CREATE TABLE [dbo].[MorhipoContent] (
+    [ID]       BIGINT        IDENTITY (1, 1) NOT NULL,
+    [itemId]   BIGINT        NOT NULL,
+    [orderId]  BIGINT        NOT NULL,
+    [quantity] FLOAT (53)    NOT NULL,
+    [unit]     VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+CREATE TABLE [dbo].[MorhipoInvoiceAddress] (
+    [ID]         BIGINT        IDENTITY (1, 1) NOT NULL,
+    [name]       VARCHAR (250) NOT NULL,
+    [address]    VARCHAR (250) NOT NULL,
+    [district]   VARCHAR (250) NOT NULL,
+    [city]       VARCHAR (250) NOT NULL,
+    [citycode]   BIGINT        NOT NULL,
+    [country]    VARCHAR (250) NOT NULL,
+    [postalcode] VARCHAR (250) NULL,
+    [taxoffice]  VARCHAR (250) NULL,
+    [taxnumber]  VARCHAR (250) NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+CREATE TABLE [dbo].[MorhipoItems] (
+    [itemid]                   BIGINT         NOT NULL,
+    [itemIndex]                BIGINT         NOT NULL,
+    [statusTypeId]             BIGINT         NOT NULL,
+    [statusDescription]        VARCHAR (250)  NOT NULL,
+    [packageId]                BIGINT         NOT NULL,
+    [packageStatusTypeId]      BIGINT         NOT NULL,
+    [packageStatusDescription] VARCHAR (250)  NOT NULL,
+    [pieceCount]               FLOAT (53)     NOT NULL,
+    [sku]                      VARCHAR (250)  NOT NULL,
+    [merchantsku]              VARCHAR (250)  NOT NULL,
+    [barcode]                  VARCHAR (250)  NOT NULL,
+    [productDescription]       VARCHAR (250)  NOT NULL,
+    [quantity]                 BIGINT         NOT NULL,
+    [unit]                     VARCHAR (250)  NOT NULL,
+    [unitPrice]                FLOAT (53)     NOT NULL,
+    [grossAmount]              FLOAT (53)     NOT NULL,
+    [taxAmount]                FLOAT (53)     NOT NULL,
+    [netAmount]                FLOAT (53)     NOT NULL,
+    [allowanceAmount]          FLOAT (53)     NOT NULL,
+    [commisionAmount]          FLOAT (53)     NOT NULL,
+    [commisionRate]            FLOAT (53)     NOT NULL,
+    [currency]                 VARCHAR (250)  NOT NULL,
+    [vatcode]                  VARCHAR (250)  NOT NULL,
+    [cancelReason]             VARCHAR (250)  NULL,
+    [lastUpdatedate]           DATETIME       NOT NULL,
+    [lastUpatetime]            TIME (7)       NOT NULL,
+    [timestamp]                BIGINT         NOT NULL,
+    [image]                    VARCHAR (250)  NOT NULL,
+    [morhipoProductId]         BIGINT         NOT NULL,
+    [cancelable]               BIT            NOT NULL,
+    [attributes]               NVARCHAR (250) NULL,
+    CONSTRAINT [PK_MorhipoItems] PRIMARY KEY CLUSTERED ([itemid] ASC)
+);
+
+CREATE TABLE [dbo].[MorhipoShipmentAddress] (
+    [ID]          BIGINT        IDENTITY (1, 1) NOT NULL,
+    [name]        VARCHAR (250) NOT NULL,
+    [address]     VARCHAR (250) NOT NULL,
+    [district]    VARCHAR (250) NOT NULL,
+    [city]        VARCHAR (250) NOT NULL,
+    [citycode]    VARCHAR (250) NOT NULL,
+    [country]     VARCHAR (250) NOT NULL,
+    [postalcode]  VARCHAR (250) NULL,
+    [phoneNumber] VARCHAR (250) NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+CREATE TABLE [dbo].[MorhipoOrderDetails] (
+    [Id]      BIGINT IDENTITY (1, 1) NOT NULL,
+    [OrderId] BIGINT NOT NULL,
+    [ItemId]  BIGINT NOT NULL,
+    CONSTRAINT [PK_MorhipoOrderDetails] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+
+
+
+CREATE TABLE [dbo].[MorhipoPackages] (
+    [ID]                BIGINT        IDENTITY (1, 1) NOT NULL,
+    [packageId]         BIGINT        NOT NULL,
+    [statusTypeId]      BIGINT        NOT NULL,
+    [statusDescription] VARCHAR (250) NOT NULL,
+    [pieceCount]        FLOAT (53)    NOT NULL,
+    [trackingCode]      VARCHAR (250) NULL,
+    [trackingUrl]       VARCHAR (250) NULL,
+    [shippingPartner]   VARCHAR (250) NULL,
+    [content]           BIGINT        NULL,
+    PRIMARY KEY CLUSTERED ([packageId] ASC),
+    FOREIGN KEY ([content]) REFERENCES [dbo].[MorhipoContent] ([ID])
+);
+
